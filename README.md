@@ -1,1 +1,9 @@
-# Compose-Note-App
+
+# Note app
+
+This project is a simple Note app designed to help you learn and practice Room Database state management and CRUD (Create, Read, Update, Delete) operations. The app features a clean UI design and ensures that the keyboard does not overlap with text input fields. It includes:
+
+## Screenshots
+
+| ![App Screenshot](https://media.discordapp.net/attachments/1261146452026196000/1261146536050561064/NoteHomePage.png?ex=6691e5bd&is=6690943d&hm=ff7f3551c520ffd4491662ae18ba83a762ab821607999f64f8a6684b37c4acb5&=&format=webp&quality=lossless&width=161&height=350) | ![App Screenshot](https://media.discordapp.net/attachments/1261146452026196000/1261146640056586341/Bookmark_Screen.png?ex=6691e5d5&is=66909455&hm=1bf05b91615227474069ded564c0ce889cd8e1fd8bb2a394c13ecdb9e5725001&=&format=webp&quality=lossless&width=161&height=350) | ![App Screenshot](https://media.discordapp.net/attachments/1261146452026196000/1261146556254388326/Add_Note.png?ex=6691e5c1&is=66909441&hm=b052cb92319511adc33c37b504c57b0503a75d7380cac95933cfe5c37d77b01b&=&format=webp&quality=lossless&width=161&height=350) | ![App Screenshot](https://media.discordapp.net/attachments/1261146452026196000/1261146580317241354/Add_Note_With_long_text_without_line_hide_.png?ex=6691e5c7&is=66909447&hm=1ce789b755c4e8ec9cebb668e4d59453ad85e390d7a900aa0ae155dbbfe237c9&=&format=webp&quality=lossless&width=160&height=350) | ![App Screenshot](https://media.discordapp.net/attachments/1261146452026196000/1261146599413780553/NoteDetails.png?ex=6691e5cc&is=6690944c&hm=1c55b42b7c57f495d125fd9727990ba7ab3f09bdb8e4f2f9ee773849eb044fbd&=&format=webp&quality=lossless&width=161&height=350) | ![App Screenshot](https://media.discordapp.net/attachments/1261146452026196000/1261146613968273490/Delete_NOte.png?ex=6691e5cf&is=6690944f&hm=a4c8e773ec193d9f0714c9e83bf1dcb15fb23f653107496bb2dd6eb2683570b5&=&format=webp&quality=lossless&width=161&height=350) |
+|:---:|:---:|:---:|:---:|:---:|:---:|
