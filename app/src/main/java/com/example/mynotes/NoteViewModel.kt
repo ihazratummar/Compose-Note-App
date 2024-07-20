@@ -26,15 +26,15 @@ class NoteViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _sortType = MutableStateFlow(SortType.DATE)
+    private val _sortType = MutableStateFlow(SortType.Date)
 
     private val _allNotes = MutableStateFlow<List<Note>>(emptyList())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private var _notes = _sortType.flatMapLatest { sortType ->
         when (sortType) {
-            SortType.TITLE -> repository.getNotesByTitle()
-            SortType.DATE -> repository.getNotesByDateAdded()
+            SortType.Title -> repository.getNotesByTitle()
+            SortType.Date -> repository.getNotesByDateAdded()
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
@@ -176,7 +176,7 @@ class NoteViewModel @Inject constructor(
             }
 
             NoteEvent.ToggleSort -> {
-                val newSortType = if (_sortType.value == SortType.DATE) SortType.TITLE else SortType.DATE
+                val newSortType = if (_sortType.value == SortType.Date) SortType.Title else SortType.Date
                 _sortType.value = newSortType
             }
 

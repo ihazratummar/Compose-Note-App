@@ -36,4 +36,7 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE isBookmarked = 1")
     fun getBookmarkedNote() : Flow<List<Note>>
 
+    @Query("SELECT * FROM note WHERE title LIKE '%' || :searchQuery || '%' OR description LIKE '%' || :searchQuery || '%'")
+    fun searchNotes(searchQuery: String): Flow<List<Note>>
+
 }

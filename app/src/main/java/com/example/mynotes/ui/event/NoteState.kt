@@ -1,6 +1,5 @@
 package com.example.mynotes.ui.event
 
-import androidx.compose.ui.graphics.Color
 import com.example.mynotes.domain.model.Note
 
 data class NoteState(
@@ -20,5 +19,5 @@ data class NoteState(
     val isUpdatingNote: Boolean = false,
 
 
-    val sortType: SortType = SortType.TITLE
+    val sortType: SortType = SortType.Title
 )

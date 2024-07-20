@@ -4,12 +4,12 @@ import com.example.mynotes.domain.model.Note
 
 sealed interface NoteEvent {
 
-    object SaveNotes: NoteEvent
-    object RefreshNotes: NoteEvent
+    data object SaveNotes: NoteEvent
+    data object RefreshNotes: NoteEvent
 
     //Dialogs
-    object ShowDeleteNoteDialog: NoteEvent
-    object HideDeleteNoteDialog: NoteEvent
+    data object ShowDeleteNoteDialog: NoteEvent
+    data object HideDeleteNoteDialog: NoteEvent
 
     //AddNotes
 
@@ -33,6 +33,6 @@ sealed interface NoteEvent {
 }
 
 enum class SortType{
-    TITLE,
-    DATE
+    Title,
+    Date
 }
