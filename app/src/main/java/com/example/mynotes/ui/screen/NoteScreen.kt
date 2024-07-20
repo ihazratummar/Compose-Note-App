@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,10 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,9 +39,11 @@ import com.example.mynotes.domain.model.Note
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
 import com.example.mynotes.ui.navigation.Route
+import com.example.mynotes.ui.screen.component.SearchNote
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +53,7 @@ fun NoteScreen(
     event: (NoteEvent) -> Unit,
     navController: NavHostController
 ) {
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -77,7 +77,7 @@ fun NoteScreen(
                     }
                     OutlinedCard(onClick = { event(NoteEvent.ToggleSort) }) {
                         Row(
-                            modifier = Modifier.padding( horizontal = 8.dp, vertical = 4.dp),
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
@@ -103,27 +103,43 @@ fun NoteScreen(
         },
     ) { paddingValues ->
         if (state.notes.isEmpty()) {
+
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
+                SearchNote(state, event)
                 Text(text = "No Notes")
             }
         } else {
-            LazyVerticalStaggeredGrid(
-                modifier = Modifier.padding(paddingValues),
-                columns = StaggeredGridCells.Fixed(count = 2),
-                contentPadding = PaddingValues(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(state.notes) { notes ->
-                    NoteCard(notes, navController)
+                SearchNote(state, event)
+                LazyVerticalStaggeredGrid(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(1f),
+                    columns = StaggeredGridCells.Fixed(count = 2),
+                    contentPadding = PaddingValues(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(state.notes) { note ->
+                        NoteCard(note, navController)
+                    }
                 }
             }
         }
     }
 }
+
+
 
 
 @Composable

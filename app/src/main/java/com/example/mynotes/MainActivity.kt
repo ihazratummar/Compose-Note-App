@@ -2,6 +2,7 @@ package com.example.mynotes
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
                 val state by viewModel.state.collectAsState()
                 val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Log.d("MainActivity", "State updated: ${state.notes.size}")
                     NavigationGraph(
                         modifier = Modifier.padding(innerPadding),
                         navController = navController,

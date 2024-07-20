@@ -45,7 +45,7 @@ fun NavigationGraph(
         }
         composable(route = Route.NoteDetailScreen.route + "/{noteId}") { backStackEntry ->
             val noteId = backStackEntry.arguments?.getString("noteId")
-            val note = state.notes.find { it.id.toString() == noteId }
+            val note = state.notes?.find { it.id.toString() == noteId }
             NoteDetailScreen(
                 modifier = modifier,
                 state = state,

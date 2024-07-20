@@ -1,5 +1,6 @@
 package com.example.mynotes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mynotes.domain.model.Note
@@ -10,8 +11,11 @@ import com.example.mynotes.ui.event.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -25,30 +29,34 @@ class NoteViewModel @Inject constructor(
     private val repository: NoteRepository
 ) : ViewModel() {
 
-
     private val _sortType = MutableStateFlow(SortType.Date)
-
-    private val _allNotes = MutableStateFlow<List<Note>>(emptyList())
+    private val _searchQuery = MutableStateFlow("")
+    private val _state = MutableStateFlow(NoteState())
+    private var searchJob: Job? = null
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private var _notes = _sortType.flatMapLatest { sortType ->
-        when (sortType) {
-            SortType.Title -> repository.getNotesByTitle()
-            SortType.Date -> repository.getNotesByDateAdded()
+    private val _notes = combine(_sortType, _searchQuery) { sortType, query ->
+        sortType to query
+    }.flatMapLatest { (sortType, query) ->
+        if (query.isBlank()) {
+            when (sortType) {
+                SortType.Title -> repository.getNotesByTitle()
+                SortType.Date -> repository.getNotesByDateAdded()
+            }
+        } else {
+            repository.getNotesBySearchQuery(query)
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-
-    private val _state = MutableStateFlow(NoteState())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val state = combine(_state, _sortType, _notes) { state, sortType, notes ->
         state.copy(
             notes = notes,
-            sortType = sortType
+            sortType = sortType,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NoteState())
 
-    private fun isFormValid(state: NoteState): Boolean {
-        return !state.title.isNullOrBlank() && !state.description.isNullOrBlank()
+    init {
+        refreshNotes()
     }
 
     fun onEvent(event: NoteEvent) {
@@ -59,8 +67,8 @@ class NoteViewModel @Inject constructor(
                 val dateAdded = System.currentTimeMillis()
 
                 val note = Note(
-                    title = title?:"New Note",
-                    description =  description?:"Description",
+                    title = title ?: "New Note",
+                    description = description ?: "Description",
                     dateAdded = dateAdded
                 )
                 viewModelScope.launch {
@@ -97,10 +105,9 @@ class NoteViewModel @Inject constructor(
                 }
             }
 
-
             is NoteEvent.UpdateNote -> {
-                val title = _state.value.updateTitle?: event.note.title
-                val description = _state.value.updateDescription?: event.note.description
+                val title = _state.value.updateTitle ?: event.note.title
+                val description = _state.value.updateDescription ?: event.note.description
 
                 val note = Note(
                     id = event.note.id,
@@ -111,7 +118,6 @@ class NoteViewModel @Inject constructor(
                 viewModelScope.launch {
                     repository.updateNote(note)
                     refreshNotes()
-
                 }
                 _state.update {
                     it.copy(
@@ -160,7 +166,7 @@ class NoteViewModel @Inject constructor(
             }
 
             is NoteEvent.DeleteNote -> {
-                viewModelScope.launch (Dispatchers.IO){
+                viewModelScope.launch(Dispatchers.IO) {
                     repository.deleteNote(event.note)
                     refreshNotes()
                     _state.update {
@@ -189,16 +195,25 @@ class NoteViewModel @Inject constructor(
                     refreshNotes()
                 }
             }
+
+            is NoteEvent.SetSearchQuery -> {
+                Log.d("NoteViewModel", "Search query: ${event.query}")
+                _searchQuery.value = event.query
+                _state.update {
+                    it.copy(
+                        searchText = event.query
+                    )
+                }
+            }
         }
     }
 
     private fun refreshNotes() {
         viewModelScope.launch(Dispatchers.IO) {
-            val note = repository.getAllNotes()
-            _allNotes.value  =note
+            val notes = repository.getAllNotes()
             _state.update {
                 it.copy(
-                    notes = note,
+                    notes = notes,
                     isUpdatingNote = false,
                     isAddingNote = false,
                     isDeletingNote = false,
@@ -208,5 +223,9 @@ class NoteViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun isFormValid(state: NoteState): Boolean {
+        return !state.title.isNullOrBlank() && !state.description.isNullOrBlank()
     }
 }
