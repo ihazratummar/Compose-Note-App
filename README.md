@@ -10,6 +10,7 @@ This project is a simple yet powerful Note app designed to help you learn and pr
 - **Bookmark Note**: Mark important notes for quick access.
 - **Toggle Card View and List View**: Switch between card and list views to organize your notes the way you prefer.
 - **Toggle Date and Title Filter**: Filter notes by date or title for easy navigation.
+- - **Search Notes**: Search notes by title title or content 
 
 ## Tech Stack
 
