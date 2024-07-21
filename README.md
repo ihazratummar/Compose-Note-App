@@ -20,12 +20,12 @@ This project is a simple yet powerful Note app designed to help you learn and pr
 ## Screenshots
 
 <p align="center">
-    <img src="screenshot/CardViewNotes.png" width="1440"/>
-    <img src="screenshot/ListView.png" width="1440"/>
-    <img src="screenshot/Bookmark.png" width="1440"/>
-    <img src="screenshot/AddNotes.png" width="1440"/>
-    <img src="screenshot/NoteDelete.png" width="1440"/>
-    <img src="screenshot/NoteDetails.png" width="1440"/>
+    <img src="screenshot/CardViewNotes.png" width="20%"/>
+    <img src="screenshot/ListView.png" width="20%"/>
+    <img src="screenshot/Bookmark.png" width="20%"/>
+    <img src="screenshot/AddNotes.png" width="20%"/>
+    <img src="screenshot/NoteDelete.png" width="20%"/>
+    <img src="screenshot/NoteDetails.png" width="20%"/>
 </p>
 
 This app not only helps in learning the intricacies of Room Database but also provides a hands-on experience with Jetpack Compose and Dagger Hilt, making it an excellent choice for anyone looking to deepen their understanding of modern Android development practices.
