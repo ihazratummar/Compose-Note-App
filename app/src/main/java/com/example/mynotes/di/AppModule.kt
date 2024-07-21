@@ -42,6 +42,10 @@ object AppModule {
         return NoteRepositoryImpl(db.dao)
     }
 
-
+    @Provides
+    @Singleton
+    fun provideContext(@ApplicationContext context: Context): Context {
+        return context
+    }
 
 }

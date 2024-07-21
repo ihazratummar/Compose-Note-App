@@ -1,5 +1,6 @@
 package com.example.mynotes
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +9,9 @@ import com.example.mynotes.domain.repository.NoteRepository
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
 import com.example.mynotes.ui.event.SortType
+import com.example.mynotes.util.PreferenceUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -28,12 +31,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val repository: NoteRepository
+    private val repository: NoteRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    private val _sortType = MutableStateFlow(SortType.Date)
+    private val _sortType = MutableStateFlow(PreferenceUtil.getSortType(context))
     private val _searchQuery = MutableStateFlow("")
-    private val _state = MutableStateFlow(NoteState())
+    private val _state = MutableStateFlow(NoteState(isToggleView = PreferenceUtil.getToggleView(context)))
     private var searchJob: Job? = null
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -150,6 +154,7 @@ class NoteViewModel @Inject constructor(
 
             is NoteEvent.SortNotes -> {
                 _sortType.value = event.sortType
+                PreferenceUtil.setSortType(context, event.sortType)
             }
 
             NoteEvent.ShowDeleteNoteDialog -> {
@@ -187,6 +192,7 @@ class NoteViewModel @Inject constructor(
             NoteEvent.ToggleSort -> {
                 val newSortType = if (_sortType.value == SortType.Date) SortType.Title else SortType.Date
                 _sortType.value = newSortType
+                PreferenceUtil.setSortType(context, newSortType)
             }
 
             is NoteEvent.BookmarkNote -> {
@@ -210,12 +216,6 @@ class NoteViewModel @Inject constructor(
                         )
                     }
                 }
-//                _searchQuery.value = event.query
-//                _state.update {
-//                    it.copy(
-//                        searchText = event.query
-//                    )
-//                }
             }
 
             NoteEvent.ToggleView -> {
@@ -224,6 +224,7 @@ class NoteViewModel @Inject constructor(
                         isToggleView = !it.isToggleView
                     )
                 }
+                PreferenceUtil.setToggleView(context, _state.value.isToggleView)
             }
         }
     }

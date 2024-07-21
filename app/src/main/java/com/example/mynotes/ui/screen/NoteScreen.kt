@@ -178,9 +178,6 @@ fun NoteScreen(
 
 }
 
-
-
-
 @Composable
 fun NoteCard(
     note: Note,
