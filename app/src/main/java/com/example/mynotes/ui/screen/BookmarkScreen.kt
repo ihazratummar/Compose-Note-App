@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -90,14 +93,28 @@ fun BookmarkScreen(
                 Text(text = "No Notes")
             }
         } else {
-            LazyVerticalStaggeredGrid(
-                modifier = Modifier.padding(paddingValues),
-                columns = StaggeredGridCells.Fixed(count = 2),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                items(state.notes.filter { it.isBookmarked }) { notes ->
+            if (state.isToggleView){
+                LazyVerticalStaggeredGrid(
+                    modifier = Modifier.padding(paddingValues),
+                    columns = StaggeredGridCells.Fixed(count = 2),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(state.notes.filter { it.isBookmarked }) { notes ->
                         BookmarkNoteCard(notes, navController)
                     }
+                }
+            }else{
+                LazyColumn (
+                    modifier = Modifier
+                        .fillMaxWidth().padding(paddingValues).padding(4.dp)
+                        .fillMaxHeight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ){
+                    items(state.notes.filter { it.isBookmarked }) { note ->
+                        NoteCard(note, navController)
+                    }
+                }
             }
         }
     }

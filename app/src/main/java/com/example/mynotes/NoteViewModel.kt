@@ -217,6 +217,14 @@ class NoteViewModel @Inject constructor(
 //                    )
 //                }
             }
+
+            NoteEvent.ToggleView -> {
+                _state.update {
+                    it.copy(
+                        isToggleView = !it.isToggleView
+                    )
+                }
+            }
         }
     }
 

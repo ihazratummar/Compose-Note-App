@@ -8,9 +8,9 @@ data class NoteState(
     val title: String? = null,
     val description: String? = null,
 
-    val updateTitle: String? =null,
-    val updateDescription: String? =null,
-    val updateColor: Int?= null,
+    val updateTitle: String? = null,
+    val updateDescription: String? = null,
+    val updateColor: Int? = null,
 
     val isAddingNote: Boolean = false,
     val isAddingFormValid: Boolean = false,
@@ -23,4 +23,6 @@ data class NoteState(
     val searchText: String = "",
     val isSearching: Boolean = false,
     var isSearchBarActive: Boolean = false,
-    )
+
+    val isToggleView: Boolean = false,
+)

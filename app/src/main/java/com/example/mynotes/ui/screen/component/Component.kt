@@ -188,7 +188,10 @@ fun SearchNote(
             },
             shape = RoundedCornerShape(30.dp),
             leadingIcon = {
-                Icon(painter = painterResource(id = R.drawable.search), contentDescription = "Search")
+                Icon(
+                    painter = painterResource(id = R.drawable.search),
+                    contentDescription = "Search"
+                )
             },
             trailingIcon = {
                 if (state.searchText.isNotEmpty() || state.searchText.isNotBlank()) {
@@ -199,7 +202,10 @@ fun SearchNote(
                             keyboardController?.hide()
                             focusManager.clearFocus()
                         }) {
-                        Icon(painter = painterResource(id = R.drawable.x), contentDescription = "Close")
+                        Icon(
+                            painter = painterResource(id = R.drawable.x),
+                            contentDescription = "Close"
+                        )
                     }
                 }
             },
@@ -220,13 +226,4 @@ fun SearchNote(
             )
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DeleteNoteDialogPreview() {
-    DeleteContactDialog(
-        onDismiss = { /* Do nothing */ },
-        onConfirm = { /* Do nothing */ }
-    )
 }

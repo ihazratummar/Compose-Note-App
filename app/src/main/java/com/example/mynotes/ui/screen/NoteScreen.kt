@@ -1,5 +1,6 @@
 package com.example.mynotes.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -53,7 +56,7 @@ fun NoteScreen(
     modifier: Modifier = Modifier,
     state: NoteState,
     event: (NoteEvent) -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -77,7 +80,6 @@ fun NoteScreen(
                     }
                 },
                 actions = {
-
                     IconButton(onClick = { navController.navigate(Route.BookmarkScreen.route) }) {
                         Icon(
                             painter = painterResource(id = R.drawable.favourite),
@@ -95,6 +97,19 @@ fun NoteScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.sorticon),
                                 contentDescription = "Shorting"
+                            )
+                        }
+                    }
+                    IconButton(onClick = { event(NoteEvent.ToggleView) }) {
+                        if (state.isToggleView){
+                            Icon(
+                                painter = painterResource(id = R.drawable.cardview),
+                                contentDescription = "Bookmark"
+                            )
+                        }else{
+                            Icon(
+                                painter = painterResource(id = R.drawable.listview),
+                                contentDescription = "Bookmark"
                             )
                         }
                     }
@@ -131,16 +146,30 @@ fun NoteScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchNote(state, event)
-                LazyVerticalStaggeredGrid(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(1f),
-                    columns = StaggeredGridCells.Fixed(count = 2),
-                    contentPadding = PaddingValues(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    items(state.notes) { note ->
-                        NoteCard(note, navController)
+                if (state.isToggleView){
+                    LazyVerticalStaggeredGrid(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(1f),
+                        columns = StaggeredGridCells.Fixed(count = 2),
+                        contentPadding = PaddingValues(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        items(state.notes) { note ->
+                            NoteCard(note, navController)
+                        }
+                    }
+                }else{
+                    LazyColumn (
+                        modifier = Modifier
+                            .fillMaxWidth().padding(4.dp)
+                            .fillMaxHeight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ){
+                        items(state.notes) { note ->
+                            NoteCard(note, navController)
+                        }
                     }
                 }
             }

@@ -21,7 +21,7 @@ fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
     state: NoteState,
-    event: (NoteEvent) -> Unit
+    event: (NoteEvent) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -32,7 +32,7 @@ fun NavigationGraph(
                 modifier = modifier,
                 state = state,
                 event = event,
-                navController = navController
+                navController = navController,
             )
         }
         composable(route = Route.AddNote.route) {

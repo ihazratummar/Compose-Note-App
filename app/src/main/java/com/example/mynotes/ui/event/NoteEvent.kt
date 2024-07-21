@@ -26,7 +26,9 @@ sealed interface NoteEvent {
 
     data class SortNotes(val sortType: SortType): NoteEvent
 
-    object ToggleSort : NoteEvent
+    data object ToggleSort : NoteEvent
+
+    data object ToggleView: NoteEvent
 
     data class BookmarkNote(val note: Note): NoteEvent
 
