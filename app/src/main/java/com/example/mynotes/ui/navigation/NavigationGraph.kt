@@ -21,7 +21,7 @@ fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
     state: NoteState,
-    event: (NoteEvent) -> Unit
+    event: (NoteEvent) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -32,7 +32,7 @@ fun NavigationGraph(
                 modifier = modifier,
                 state = state,
                 event = event,
-                navController = navController
+                navController = navController,
             )
         }
         composable(route = Route.AddNote.route) {
@@ -45,7 +45,7 @@ fun NavigationGraph(
         }
         composable(route = Route.NoteDetailScreen.route + "/{noteId}") { backStackEntry ->
             val noteId = backStackEntry.arguments?.getString("noteId")
-            val note = state.notes.find { it.id.toString() == noteId }
+            val note = state.notes?.find { it.id.toString() == noteId }
             NoteDetailScreen(
                 modifier = modifier,
                 state = state,

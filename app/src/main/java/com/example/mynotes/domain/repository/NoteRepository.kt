@@ -13,6 +13,5 @@ interface NoteRepository {
     fun getAllNotes(): List<Note>
     fun getNote(id: Int): Flow<Note>
     fun getBookmarkedNotes(): Flow<List<Note>>
-
-
+    fun getNotesBySearchQuery(query: String): Flow<List<Note>>
 }

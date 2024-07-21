@@ -4,6 +4,7 @@ import com.example.mynotes.data.dao.NoteDao
 import com.example.mynotes.domain.model.Note
 import com.example.mynotes.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class NoteRepositoryImpl @Inject constructor(
@@ -39,5 +40,15 @@ class NoteRepositoryImpl @Inject constructor(
 
     override fun getBookmarkedNotes(): Flow<List<Note>> {
         return dao.getBookmarkedNote()
+    }
+
+    override fun getNotesBySearchQuery(query: String): Flow<List<Note>> {
+        return if (query.isBlank()) {
+            // Return empty list if search query is blank
+            flow { emit(emptyList()) }
+        } else {
+            val trimmedQuery = query.trim()
+            dao.searchNotes(trimmedQuery)
+        }
     }
 }
