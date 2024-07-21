@@ -47,7 +47,8 @@ class NoteRepositoryImpl @Inject constructor(
             // Return empty list if search query is blank
             flow { emit(emptyList()) }
         } else {
-            dao.searchNotes(query)
+            val trimmedQuery = query.trim()
+            dao.searchNotes(trimmedQuery)
         }
     }
 }

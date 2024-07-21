@@ -11,12 +11,14 @@ import com.example.mynotes.ui.event.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -34,7 +36,7 @@ class NoteViewModel @Inject constructor(
     private val _state = MutableStateFlow(NoteState())
     private var searchJob: Job? = null
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val _notes = combine(_sortType, _searchQuery) { sortType, query ->
         sortType to query
     }.flatMapLatest { (sortType, query) ->
@@ -45,6 +47,7 @@ class NoteViewModel @Inject constructor(
             }
         } else {
             repository.getNotesBySearchQuery(query)
+                .debounce(500L)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -198,12 +201,21 @@ class NoteViewModel @Inject constructor(
 
             is NoteEvent.SetSearchQuery -> {
                 Log.d("NoteViewModel", "Search query: ${event.query}")
-                _searchQuery.value = event.query
-                _state.update {
-                    it.copy(
-                        searchText = event.query
-                    )
+                searchJob?.cancel()
+                searchJob = viewModelScope.launch {
+                    _searchQuery.value = event.query
+                    _state.update {
+                        it.copy(
+                            searchText = event.query
+                        )
+                    }
                 }
+//                _searchQuery.value = event.query
+//                _state.update {
+//                    it.copy(
+//                        searchText = event.query
+//                    )
+//                }
             }
         }
     }

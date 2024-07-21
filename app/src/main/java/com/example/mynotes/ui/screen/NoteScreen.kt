@@ -26,8 +26,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,7 +55,14 @@ fun NoteScreen(
     event: (NoteEvent) -> Unit,
     navController: NavHostController
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
 
+    // Ensure the keyboard remains open when notes are empty and search text is not empty
+    LaunchedEffect(state.notes, state.searchText) {
+        if (state.searchText.isNotEmpty() && state.notes.isEmpty()) {
+            keyboardController?.show()
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -102,8 +111,8 @@ fun NoteScreen(
             }
         },
     ) { paddingValues ->
-        if (state.notes.isEmpty()) {
 
+        if (state.notes.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -137,6 +146,7 @@ fun NoteScreen(
             }
         }
     }
+
 }
 
 

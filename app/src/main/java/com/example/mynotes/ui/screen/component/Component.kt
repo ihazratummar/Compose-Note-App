@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,8 +27,14 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -95,7 +102,7 @@ fun TransparentHintTextField(
                 imeAction = imeAction
             ),
 
-        )
+            )
         if (isHintVisible) {
             Text(text = hint, color = MaterialTheme.colorScheme.outlineVariant)
         }
@@ -161,35 +168,58 @@ fun DeleteContactDialog(
 @Composable
 fun SearchNote(
     state: NoteState,
-    event: (NoteEvent) -> Unit
+    event: (NoteEvent) -> Unit,
 ) {
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        value = state.searchText,
-        onValueChange = { query ->
-            event(NoteEvent.SetSearchQuery(query))
-        },
-        shape = RoundedCornerShape(30.dp),
-        leadingIcon = {
-            Icon(painter = painterResource(id = R.drawable.search), contentDescription = "Search")
-        },
-        trailingIcon = {
-            if (state.searchText.isNotEmpty()) {
-                IconButton(onClick = {
-                    event(NoteEvent.SetSearchQuery(""))
-                }) {
-                    Icon(painter = painterResource(id = R.drawable.x), contentDescription = "Close")
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            value = state.searchText,
+            onValueChange = { query ->
+                event(NoteEvent.SetSearchQuery(query))
+            },
+            shape = RoundedCornerShape(30.dp),
+            leadingIcon = {
+                Icon(painter = painterResource(id = R.drawable.search), contentDescription = "Search")
+            },
+            trailingIcon = {
+                if (state.searchText.isNotEmpty() || state.searchText.isNotBlank()) {
+                    IconButton(
+                        modifier = Modifier.focusRequester(focusRequester),
+                        onClick = {
+                            event(NoteEvent.SetSearchQuery(""))
+                            keyboardController?.hide()
+                            focusManager.clearFocus()
+                        }) {
+                        Icon(painter = painterResource(id = R.drawable.x), contentDescription = "Close")
+                    }
                 }
-            }
-        },
-        placeholder = { Text(text = "Search Notes")},
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+            },
+            placeholder = { Text(text = "Search Notes") },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                }
+            )
         )
-    )
+    }
 }
 
 @Preview(showBackground = true)
