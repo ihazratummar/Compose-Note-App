@@ -274,6 +274,13 @@ fun MyNotesTheme(
         else -> lightScheme
     }
 
+    val view = LocalView.current
+    val activity  = LocalContext.current as? Activity
+    SideEffect {
+        activity?.window?.statusBarColor = colorScheme.background.toArgb()
+        WindowCompat.getInsetsController(activity?.window!!, view).isAppearanceLightStatusBars = !darkTheme
+    }
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

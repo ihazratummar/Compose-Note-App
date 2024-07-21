@@ -1,5 +1,6 @@
 package com.example.mynotes
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -16,10 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
@@ -37,7 +36,13 @@ class NoteViewModel @Inject constructor(
 
     private val _sortType = MutableStateFlow(PreferenceUtil.getSortType(context))
     private val _searchQuery = MutableStateFlow("")
-    private val _state = MutableStateFlow(NoteState(isToggleView = PreferenceUtil.getToggleView(context)))
+    private val _state = MutableStateFlow(
+        NoteState(
+            isToggleView = PreferenceUtil.getToggleView(context),
+            isDarkMode = PreferenceUtil.getThemeMode(context),
+            currentLanguage = PreferenceUtil.getLanguage(context)
+        )
+    )
     private var searchJob: Job? = null
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -64,6 +69,9 @@ class NoteViewModel @Inject constructor(
 
     init {
         refreshNotes()
+        viewModelScope.launch {
+
+        }
     }
 
     fun onEvent(event: NoteEvent) {
@@ -190,7 +198,8 @@ class NoteViewModel @Inject constructor(
             }
 
             NoteEvent.ToggleSort -> {
-                val newSortType = if (_sortType.value == SortType.Date) SortType.Title else SortType.Date
+                val newSortType =
+                    if (_sortType.value == SortType.Date) SortType.Title else SortType.Date
                 _sortType.value = newSortType
                 PreferenceUtil.setSortType(context, newSortType)
             }
@@ -226,6 +235,49 @@ class NoteViewModel @Inject constructor(
                 }
                 PreferenceUtil.setToggleView(context, _state.value.isToggleView)
             }
+
+            NoteEvent.ToggleTheme -> {
+                toggleTheme()
+            }
+
+            is NoteEvent.ChangeLanguage -> {
+                val newLanguage = event.language.takeIf { it.isNotBlank() }?:"en"
+                _state.update {
+                    it.copy(
+                        currentLanguage = newLanguage
+                    )
+                }
+                PreferenceUtil.setLanguage(context, newLanguage)
+                applyLanguageChange()
+            }
+            NoteEvent.LanguageDialog ->{
+                _state.update {
+                    it.copy(
+                        isLanguageDialogBoxOpen = !it.isLanguageDialogBoxOpen
+                    )
+                }
+            }
+        }
+    }
+
+    private fun applyLanguageChange() {
+        viewModelScope.launch {
+            if (context is Activity) {
+                val intent = context.intent
+                context.finish()
+                context.startActivity(intent)
+            }
+        }
+    }
+
+    private fun toggleTheme() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isDarkMode = !it.isDarkMode
+                )
+            }
+            PreferenceUtil.setThemeMode(context, _state.value.isDarkMode)
         }
     }
 

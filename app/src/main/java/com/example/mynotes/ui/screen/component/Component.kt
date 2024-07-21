@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -112,8 +113,8 @@ fun TransparentHintTextField(
 @Composable
 fun DeleteContactDialog(
     modifier: Modifier = Modifier,
-    label: String = "Delete Note",
-    description: String = "Are you sure you want to delete this note?",
+    label: String = stringResource(R.string.delete_note),
+    description: String = stringResource(R.string.are_you_sure_you_want_to_delete_this_note),
     onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {}
 ) {
@@ -143,7 +144,7 @@ fun DeleteContactDialog(
             ) {
                 TextButton(onClick = onDismiss) {
                     Text(
-                        text = "NO",
+                        text = stringResource(R.string.no),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -155,7 +156,7 @@ fun DeleteContactDialog(
                     )
                 ) {
                     Text(
-                        text = "YES",
+                        text = stringResource(R.string.yes),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -209,7 +210,7 @@ fun SearchNote(
                     }
                 }
             },
-            placeholder = { Text(text = "Search Notes") },
+            placeholder = { Text(text = stringResource(R.string.search_notes)) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = MaterialTheme.colorScheme.outline

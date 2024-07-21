@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">আমার নোটস</string>
+    <string name="notes">নোটস</string>
+    <string name="settings">সেটিংস</string>
+    <string name="change_language">ভাষা পরিবর্তন করুন</string>
+    <string name="search_notes">অনুসন্ধান নোট</string>
+    <string name="enter_title_of_note">নোটের শিরোনাম লিখুন...</string>
+    <string name="delete_note">নোট মুছুন</string>
+    <string name="are_you_sure_you_want_to_delete_this_note">আপনি এই নোট মুছে ফেলতে চান আপনি কি নিশ্চিত?</string>
+    <string name="no">না</string>
+    <string name="yes">হ্যাঁ</string>
+</resources>

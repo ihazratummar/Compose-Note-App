@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextMotion
@@ -112,7 +113,7 @@ fun AddNoteScreen(
                     onValueChange = {
                         event(NoteEvent.SetTitle(it))
                     },
-                    hint = if (state.title == null) "Enter title of note..." else "",
+                    hint = if (state.title == null) stringResource(R.string.enter_title_of_note) else "",
                     textStyle = TextStyle(
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = MaterialTheme.typography.headlineMedium.fontSize

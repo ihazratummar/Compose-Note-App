@@ -25,4 +25,10 @@ data class NoteState(
     var isSearchBarActive: Boolean = false,
 
     val isToggleView: Boolean = false,
+
+    val isDarkMode: Boolean = false,
+
+    val currentLanguage: String = "en",
+
+    val isLanguageDialogBoxOpen: Boolean = false,
 )

@@ -33,7 +33,12 @@ sealed interface NoteEvent {
     data class BookmarkNote(val note: Note): NoteEvent
 
     data class SetSearchQuery(val query: String): NoteEvent
-//    data class SearchNotes(val query: String): NoteEvent
+
+    data object ToggleTheme : NoteEvent
+
+    data class ChangeLanguage(val language: String): NoteEvent
+
+    data object LanguageDialog: NoteEvent
 
 }
 

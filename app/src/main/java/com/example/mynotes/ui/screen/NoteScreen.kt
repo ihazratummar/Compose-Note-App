@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -71,7 +72,7 @@ fun NoteScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text(text = "My Notes")
+                        Text(text = stringResource(R.string.notes))
                         Text(
                             text = "Enjoy note taking",
                             style = MaterialTheme.typography.labelMedium,
@@ -80,6 +81,25 @@ fun NoteScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = { navController.navigate(Route.SettingScreen.route) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.setting),
+                            contentDescription = "Bookmark"
+                        )
+                    }
+                    IconButton(onClick = { event(NoteEvent.ToggleTheme) }) {
+                        if (state.isDarkMode){
+                            Icon(
+                                painter = painterResource(id = R.drawable.moon),
+                                contentDescription = "Bookmark"
+                            )
+                        }else{
+                            Icon(
+                                painter = painterResource(id = R.drawable.sun),
+                                contentDescription = "Bookmark"
+                            )
+                        }
+                    }
                     IconButton(onClick = { navController.navigate(Route.BookmarkScreen.route) }) {
                         Icon(
                             painter = painterResource(id = R.drawable.favourite),
@@ -162,7 +182,8 @@ fun NoteScreen(
                 }else{
                     LazyColumn (
                         modifier = Modifier
-                            .fillMaxWidth().padding(4.dp)
+                            .fillMaxWidth()
+                            .padding(4.dp)
                             .fillMaxHeight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(8.dp)

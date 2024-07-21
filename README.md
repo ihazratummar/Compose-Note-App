@@ -11,6 +11,8 @@ This project is a simple yet powerful Note app designed to help you learn and pr
 - **Toggle Card View and List View**: Switch between card and list views to organize your notes the way you prefer.
 - **Toggle Date and Title Filter**: Filter notes by date or title for easy navigation.
 - **Search Notes**: Search notes by title title or content 
+- **Theme Switcher**: Switch to dark mode and light mode 
+- **Language Select**: Select language feature 
 
 ## Tech Stack
 
@@ -27,6 +29,7 @@ This project is a simple yet powerful Note app designed to help you learn and pr
     <img src="screenshot/AddNotes.png" width="20%"/>
     <img src="screenshot/NoteDelete.png" width="20%"/>
     <img src="screenshot/NoteDetails.png" width="20%"/>
+    <img src="screenshot/Setting.png" width="20%"/>
 </p>
 
 This app not only helps in learning the intricacies of Room Database but also provides a hands-on experience with Jetpack Compose and Dagger Hilt, making it an excellent choice for anyone looking to deepen their understanding of modern Android development practices.

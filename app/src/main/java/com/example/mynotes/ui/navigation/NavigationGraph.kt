@@ -13,6 +13,7 @@ import com.example.mynotes.ui.screen.AddNoteScreen
 import com.example.mynotes.ui.screen.BookmarkScreen
 import com.example.mynotes.ui.screen.NoteDetailScreen
 import com.example.mynotes.ui.screen.NoteScreen
+import com.example.mynotes.ui.screen.NoteSetting
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -56,6 +57,14 @@ fun NavigationGraph(
         }
         composable(Route.BookmarkScreen.route) {
             BookmarkScreen(
+                modifier = modifier,
+                state = state,
+                event = event,
+                navController = navController
+            )
+        }
+        composable(Route.SettingScreen.route) {
+            NoteSetting(
                 modifier = modifier,
                 state = state,
                 event = event,
