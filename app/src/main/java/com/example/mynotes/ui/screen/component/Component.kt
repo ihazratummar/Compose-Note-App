@@ -3,13 +3,14 @@ package com.example.mynotes.ui.screen.component
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,11 +42,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.navigation.NavController
 import com.example.mynotes.R
+import com.example.mynotes.domain.model.Note
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
+import com.example.mynotes.ui.navigation.Route
+import com.example.mynotes.ui.theme.WindowType
+import com.example.mynotes.ui.theme.dimens
+import com.example.mynotes.ui.theme.rememberWindowSize
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun CustomTextField(
@@ -119,15 +128,15 @@ fun DeleteContactDialog(
     onConfirm: () -> Unit = {}
 ) {
     Card(
-        modifier = modifier.padding(10.dp),
+        modifier = modifier.padding(MaterialTheme.dimens.size12),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer,
+            containerColor = MaterialTheme.colorScheme.errorContainer.copy(0.9f),
             contentColor = MaterialTheme.colorScheme.onErrorContainer
         )
     ) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(MaterialTheme.dimens.size20)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -135,7 +144,7 @@ fun DeleteContactDialog(
                 text = label,
                 fontWeight = FontWeight.SemiBold
             )
-            Spacer(modifier = Modifier.padding(4.dp))
+            Spacer(modifier = Modifier.padding(MaterialTheme.dimens.size4))
             Text(text = description)
 
             Row(
@@ -148,7 +157,7 @@ fun DeleteContactDialog(
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
                 TextButton(
                     onClick = onConfirm,
                     colors = ButtonDefaults.textButtonColors(
@@ -182,12 +191,12 @@ fun SearchNote(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(MaterialTheme.dimens.size5),
             value = state.searchText,
             onValueChange = { query ->
                 event(NoteEvent.SetSearchQuery(query))
             },
-            shape = RoundedCornerShape(30.dp),
+            shape = RoundedCornerShape(MaterialTheme.dimens.size20),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.search),
@@ -226,5 +235,164 @@ fun SearchNote(
                 }
             )
         )
+    }
+}
+
+
+
+@Composable
+fun NoteCard(
+    note: Note,
+    navController: NavController
+) {
+
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+    val formattedDate = dateFormat.format(Date(note.dateAdded))
+    val window = rememberWindowSize()
+    when(window.width){
+        WindowType.Compact -> {
+            CompactNoteCard(navController, note, formattedDate)
+        }
+        WindowType.Medium -> {
+            MediumNoteCard(navController, note, formattedDate)
+        }
+        WindowType.Expanded -> {
+            ExpandedNoteCard(navController, note, formattedDate)
+        }
+    }
+
+}
+
+@Composable
+private fun CompactNoteCard(
+    navController: NavController,
+    note: Note,
+    formattedDate: String
+) {
+    Card(
+        modifier = Modifier
+            .clickable {
+                navController.navigate(Route.NoteDetailScreen.route + "/${note.id}")
+            }
+            .padding(MaterialTheme.dimens.size5),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(MaterialTheme.dimens.size15)
+        ) {
+            Text(
+                text = note.title,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(MaterialTheme.dimens.size5)
+            )
+            Text(
+                text = note.description,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 2,
+                modifier = Modifier.padding(MaterialTheme.dimens.size4),
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = formattedDate,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(MaterialTheme.dimens.size4)
+            )
+        }
+    }
+}
+
+@Composable
+private fun MediumNoteCard(
+    navController: NavController,
+    note: Note,
+    formattedDate: String
+) {
+    Card(
+        modifier = Modifier
+            .clickable {
+                navController.navigate(Route.NoteDetailScreen.route + "/${note.id}")
+            }
+            .padding(MaterialTheme.dimens.size2),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(MaterialTheme.dimens.size5)
+        ) {
+            Text(
+                text = note.title,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 4,
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size5),
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size5))
+            Text(
+                text = note.description,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 3,
+                modifier = Modifier.padding(horizontal =MaterialTheme.dimens.size4),
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size5))
+            Text(
+                text = formattedDate,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(horizontal=MaterialTheme.dimens.size4)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ExpandedNoteCard(
+    navController: NavController,
+    note: Note,
+    formattedDate: String
+) {
+    Card(
+        modifier = Modifier
+            .clickable {
+                navController.navigate(Route.NoteDetailScreen.route + "/${note.id}")
+            }
+            .padding(MaterialTheme.dimens.size5),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(MaterialTheme.dimens.size15)
+        ) {
+            Text(
+                text = note.title,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(MaterialTheme.dimens.size5)
+            )
+            Text(
+                text = note.description,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 2,
+                modifier = Modifier.padding(MaterialTheme.dimens.size4),
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = formattedDate,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(MaterialTheme.dimens.size4)
+            )
+        }
     }
 }

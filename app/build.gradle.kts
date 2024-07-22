@@ -89,4 +89,6 @@ dependencies {
     implementation (libs.coil.compose)
 
     implementation (libs.androidx.preference.ktx)
+
+    implementation(libs.androidx.material3.window.size)
 }

@@ -38,6 +38,8 @@ import com.example.mynotes.domain.model.Note
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
 import com.example.mynotes.ui.navigation.Route
+import com.example.mynotes.ui.screen.component.NoteCard
+import com.example.mynotes.ui.theme.dimens
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -56,7 +58,7 @@ fun BookmarkScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = {
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        modifier = Modifier.fillMaxWidth().padding(start = MaterialTheme.dimens.size20),
                         text = "Bookmark",
                     )
                 },
@@ -66,7 +68,7 @@ fun BookmarkScreen(
                         event(NoteEvent.RefreshNotes)
                     }) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8, vertical = MaterialTheme.dimens.size8),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
@@ -74,7 +76,7 @@ fun BookmarkScreen(
                                 painter = painterResource(id = R.drawable.arrowleft),
                                 contentDescription = "Back"
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
+                            Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
                             Text(text = "Back")
                         }
                     }
@@ -97,7 +99,7 @@ fun BookmarkScreen(
                 LazyVerticalStaggeredGrid(
                     modifier = Modifier.padding(paddingValues),
                     columns = StaggeredGridCells.Fixed(count = 2),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
                 ) {
                     items(state.notes.filter { it.isBookmarked }) { notes ->
                         BookmarkNoteCard(notes, navController)
@@ -106,10 +108,10 @@ fun BookmarkScreen(
             }else{
                 LazyColumn (
                     modifier = Modifier
-                        .fillMaxWidth().padding(paddingValues).padding(4.dp)
+                        .fillMaxWidth().padding(paddingValues).padding(MaterialTheme.dimens.size4)
                         .fillMaxHeight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8)
                 ){
                     items(state.notes.filter { it.isBookmarked }) { note ->
                         NoteCard(note, navController)
@@ -134,7 +136,7 @@ fun BookmarkNoteCard(
             .clickable {
                 navController.navigate(Route.NoteDetailScreen.route + "/${note.id}")
             }
-            .padding(4.dp),
+            .padding(MaterialTheme.dimens.size5),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -143,24 +145,24 @@ fun BookmarkNoteCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp)
+                .padding(MaterialTheme.dimens.size15)
         ) {
             Text(
                 text = note.title,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = MaterialTheme.dimens.size8)
             )
             Text(
                 text = note.description,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 2,
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.padding(top = MaterialTheme.dimens.size8),
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = formattedDate,
                 style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = MaterialTheme.dimens.size8)
             )
         }
     }

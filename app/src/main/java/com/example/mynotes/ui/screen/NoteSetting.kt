@@ -34,6 +34,7 @@ import androidx.navigation.NavHostController
 import com.example.mynotes.R
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
+import com.example.mynotes.ui.theme.dimens
 
 /**
  * @author Hazrat Ummar Shaikh
@@ -69,7 +70,7 @@ fun NoteSetting(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(MaterialTheme.dimens.size8)
                 .padding(paddingValues),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -80,12 +81,12 @@ fun NoteSetting(
                     .clickable {
                         event(NoteEvent.LanguageDialog)
                     },
-                shape = RoundedCornerShape(14.dp)
+                shape = RoundedCornerShape(MaterialTheme.dimens.size15)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 15.dp),
+                        .padding(horizontal = MaterialTheme.dimens.size20, vertical = MaterialTheme.dimens.size15),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -93,7 +94,7 @@ fun NoteSetting(
                         painter = painterResource(id = R.drawable.languageicon),
                         contentDescription = "Language"
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
                     Text(
                         modifier = Modifier,
                         text = stringResource(R.string.change_language)
@@ -108,7 +109,7 @@ fun NoteSetting(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                    border = BorderStroke(MaterialTheme.dimens.size1, MaterialTheme.colorScheme.primary)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -126,7 +127,7 @@ fun NoteSetting(
                                     painter = painterResource(id = R.drawable.bengali),
                                     contentDescription = "Bengali"
                                 )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
                                 Text(text = "Bengali")
                             }
                         }
@@ -142,7 +143,7 @@ fun NoteSetting(
                                     painter = painterResource(id = R.drawable.english),
                                     contentDescription = "English"
                                 )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
                                 Text(text = "English")
                             }
                         }
