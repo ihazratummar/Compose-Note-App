@@ -1,5 +1,7 @@
 package com.example.mynotes.ui.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,7 +39,8 @@ import androidx.navigation.NavHostController
 import com.example.mynotes.R
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
-import com.example.mynotes.ui.navigation.Route
+import com.example.mynotes.ui.navigation.AddNoteScreen
+import com.example.mynotes.ui.navigation.SettingScreen
 import com.example.mynotes.ui.screen.component.MediumNoteScreen
 import com.example.mynotes.ui.screen.component.NoteCard
 import com.example.mynotes.ui.screen.component.SearchNote
@@ -45,19 +49,20 @@ import com.example.mynotes.ui.theme.dimens
 import com.example.mynotes.ui.theme.rememberWindowSize
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NoteScreen(
     modifier: Modifier = Modifier,
     state: NoteState,
     event: (NoteEvent) -> Unit,
     navController: NavHostController,
+    onNoteClick: (Int) -> Unit = {}
 ) {
 
     val window = rememberWindowSize()
     when (window.width) {
         WindowType.Compact -> {
-            CompactNoteScreen(state, navController, event)
+            CompactNoteScreen(state, navController, event, onNoteClick = onNoteClick)
         }
 
         WindowType.Medium -> {
@@ -72,12 +77,14 @@ fun NoteScreen(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompactNoteScreen(
     state: NoteState,
     navController: NavHostController,
-    event: (NoteEvent) -> Unit
+    event: (NoteEvent) -> Unit,
+    onNoteClick: (Int) -> Unit = {}
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     // Ensure the keyboard remains open when notes are empty and search text is not empty
@@ -87,6 +94,7 @@ fun CompactNoteScreen(
         }
     }
     Scaffold(
+        modifier = Modifier,
         topBar = {
             TopAppBar(
                 title = {
@@ -100,42 +108,38 @@ fun CompactNoteScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate(Route.SettingScreen.route) }) {
+                    IconButton(onClick = {
+                        navController.navigate(SettingScreen)
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.setting),
-                            contentDescription = "Bookmark"
+                            contentDescription = "Setting"
                         )
                     }
                     IconButton(onClick = { event(NoteEvent.ToggleTheme) }) {
                         if (state.isDarkMode) {
                             Icon(
                                 painter = painterResource(id = R.drawable.moon),
-                                contentDescription = "Bookmark"
+                                contentDescription = "Dark toggle"
                             )
                         } else {
                             Icon(
                                 painter = painterResource(id = R.drawable.sun),
-                                contentDescription = "Bookmark"
+                                contentDescription = "Light Toggle"
                             )
                         }
-                    }
-                    IconButton(onClick = { navController.navigate(Route.BookmarkScreen.route) }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.favourite),
-                            contentDescription = "Bookmark"
-                        )
                     }
                     OutlinedCard(onClick = { event(NoteEvent.ToggleSort) }) {
                         Row(
                             modifier = Modifier.padding(
-                                horizontal = MaterialTheme.dimens.size8,
-                                vertical = MaterialTheme.dimens.size5
+                                horizontal = dimens.size8,
+                                vertical = dimens.size5
                             ),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(text = state.sortType.name)
-                            Spacer(modifier = Modifier.width(MaterialTheme.dimens.size5))
+                            Spacer(modifier = Modifier.width(dimens.size5))
                             Icon(
                                 painter = painterResource(id = R.drawable.sorticon),
                                 contentDescription = "Shorting"
@@ -160,8 +164,9 @@ fun CompactNoteScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                modifier = Modifier.navigationBarsPadding().padding(bottom = dimens.size50),
                 onClick = {
-                    navController.navigate(Route.AddNote.route)
+                    navController.navigate(AddNoteScreen)
                 },
             ) {
                 Icon(painter = painterResource(id = R.drawable.add), contentDescription = "Save")
@@ -173,7 +178,7 @@ fun CompactNoteScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = MaterialTheme.dimens.size20)
+                    .padding(horizontal = dimens.size20)
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
@@ -182,6 +187,7 @@ fun CompactNoteScreen(
                     state = state, event = event
                 )
                 Text(text = "No Notes")
+
             }
         } else {
             Column(
@@ -191,7 +197,7 @@ fun CompactNoteScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchNote(
-                    modifier = Modifier.padding(MaterialTheme.dimens.size20),
+                    modifier = Modifier.padding(dimens.size20),
                     state = state,
                     event = event
                 )
@@ -201,25 +207,24 @@ fun CompactNoteScreen(
                             .fillMaxWidth()
                             .fillMaxHeight(1f),
                         columns = StaggeredGridCells.Fixed(count = 2),
-                        contentPadding = PaddingValues(MaterialTheme.dimens.size8),
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
+                        contentPadding = PaddingValues(dimens.size8),
+                        horizontalArrangement = Arrangement.spacedBy(dimens.size8),
                     ) {
                         items(state.notes) { note ->
-                            NoteCard(note, navController)
+                            NoteCard(note, onNoteClick = onNoteClick)
                         }
                     }
                 } else {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.dimens.size20)
-                            .padding(vertical = MaterialTheme.dimens.size4)
+                            .padding(horizontal = dimens.size20, vertical = dimens.size4)
                             .fillMaxHeight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8)
+                        verticalArrangement = Arrangement.spacedBy(dimens.size8)
                     ) {
                         items(state.notes) { note ->
-                            NoteCard(note, navController)
+                            NoteCard(note, onNoteClick)
                         }
                     }
                 }

@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -36,7 +34,9 @@ import androidx.navigation.NavHostController
 import com.example.mynotes.R
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
-import com.example.mynotes.ui.navigation.Route
+import com.example.mynotes.ui.navigation.AddNoteScreen
+import com.example.mynotes.ui.navigation.BookmarkScreen
+import com.example.mynotes.ui.navigation.SettingScreen
 import com.example.mynotes.ui.theme.dimens
 
 /**
@@ -48,7 +48,8 @@ import com.example.mynotes.ui.theme.dimens
 fun MediumNoteScreen(
     state: NoteState,
     navController: NavHostController,
-    event: (NoteEvent) -> Unit
+    event: (NoteEvent) -> Unit,
+    onNoteClick: (Int) -> Unit = {}
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     // Ensure the keyboard remains open when notes are empty and search text is not empty
@@ -58,7 +59,7 @@ fun MediumNoteScreen(
         }
     }
     Scaffold(
-        modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8),
+        modifier = Modifier.padding(horizontal = dimens.size8),
         topBar = {
             TopAppBar(
                 title = {
@@ -72,7 +73,9 @@ fun MediumNoteScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate(Route.SettingScreen.route) }) {
+                    IconButton(onClick = {
+                        navController.navigate(SettingScreen)
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.setting),
                             contentDescription = "Bookmark"
@@ -91,7 +94,9 @@ fun MediumNoteScreen(
                             )
                         }
                     }
-                    IconButton(onClick = { navController.navigate(Route.BookmarkScreen.route) }) {
+                    IconButton(onClick = {
+                        navController.navigate(BookmarkScreen)
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.favourite),
                             contentDescription = "Bookmark"
@@ -100,14 +105,14 @@ fun MediumNoteScreen(
                     OutlinedCard(onClick = { event(NoteEvent.ToggleSort) }) {
                         Row(
                             modifier = Modifier.padding(
-                                horizontal = MaterialTheme.dimens.size8,
-                                vertical = MaterialTheme.dimens.size5
+                                horizontal = dimens.size8,
+                                vertical = dimens.size5
                             ),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(text = state.sortType.name)
-                            Spacer(modifier = Modifier.width(MaterialTheme.dimens.size5))
+                            Spacer(modifier = Modifier.width(dimens.size5))
                             Icon(
                                 painter = painterResource(id = R.drawable.sorticon),
                                 contentDescription = "Shorting"
@@ -120,7 +125,7 @@ fun MediumNoteScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navController.navigate(Route.AddNote.route)
+                    navController.navigate(AddNoteScreen)
                 },
             ) {
                 Icon(painter = painterResource(id = R.drawable.add), contentDescription = "Save")
@@ -158,11 +163,11 @@ fun MediumNoteScreen(
                         .fillMaxWidth()
                         .fillMaxHeight(1f),
                     columns = StaggeredGridCells.Fixed(count = 5),
-                    contentPadding = PaddingValues(MaterialTheme.dimens.size1),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size1),
+                    contentPadding = PaddingValues(dimens.size1),
+                    horizontalArrangement = Arrangement.spacedBy(dimens.size1),
                 ) {
                     items(state.notes) { note ->
-                        NoteCard(note, navController)
+                        NoteCard(note, onNoteClick =  onNoteClick)
                     }
                 }
             }

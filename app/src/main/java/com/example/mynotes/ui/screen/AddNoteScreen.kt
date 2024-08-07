@@ -54,7 +54,7 @@ fun AddNoteScreen(
                 navigationIcon = {
                     OutlinedCard(onClick = { navController.popBackStack() }) {
                         Row(
-                            modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8, vertical = MaterialTheme.dimens.size8),
+                            modifier = Modifier.padding(horizontal = dimens.size8, vertical = dimens.size8),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
@@ -62,7 +62,7 @@ fun AddNoteScreen(
                                 painter = painterResource(id = R.drawable.arrowleft),
                                 contentDescription = "Back"
                             )
-                            Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
+                            Spacer(modifier = Modifier.width(dimens.size8))
                             Text(text = "Back")
                         }
                     }
@@ -91,12 +91,12 @@ fun AddNoteScreen(
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(horizontal = MaterialTheme.dimens.size10)
+                .padding(horizontal = dimens.size10)
                 .fillMaxSize()
                 .imePadding()
         ) {
             item {
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size15))
+                Spacer(modifier = Modifier.height(dimens.size15))
                 TransparentHintTextField(
                     text = state.title ?: "",
                     onValueChange = {
@@ -108,15 +108,15 @@ fun AddNoteScreen(
                         fontSize = MaterialTheme.typography.headlineMedium.fontSize
                     ),
                     modifier = Modifier
-                        .padding(MaterialTheme.dimens.size4)
+                        .padding(dimens.size4)
                         .fillMaxWidth(),
                     imeAction = ImeAction.Next,
                 )
             }
             item {
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size15))
+                Spacer(modifier = Modifier.height(dimens.size15))
                 HorizontalDivider()
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size15))
+                Spacer(modifier = Modifier.height(dimens.size15))
             }
 
             item {
@@ -127,7 +127,7 @@ fun AddNoteScreen(
                     },
                     hint = if (state.description == null) DESCRIPTION_TEXT else "",
                     modifier = Modifier
-                        .padding(MaterialTheme.dimens.size4)
+                        .padding(dimens.size4)
                         .fillParentMaxSize(),
                     textStyle = TextStyle(
                         color = MaterialTheme.colorScheme.onBackground,

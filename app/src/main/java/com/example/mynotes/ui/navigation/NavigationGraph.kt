@@ -2,6 +2,8 @@ package com.example.mynotes.ui.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -20,23 +22,27 @@ import com.example.mynotes.ui.screen.NoteSetting
 fun NavigationGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String,
     state: NoteState,
     event: (NoteEvent) -> Unit,
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = NoteScreen,
+        exitTransition = { ExitTransition.None},
+        enterTransition = { EnterTransition.None}
     ) {
-        composable(route = Route.NoteScreen.route) {
+        composable<NoteScreen> {
             NoteScreen(
                 modifier = modifier,
                 state = state,
                 event = event,
                 navController = navController,
+                onNoteClick = {id ->
+                    navController.navigate(NoteDetailScreen(id.toString()))
+                }
             )
         }
-        composable(route = Route.AddNote.route) {
+        composable<AddNoteScreen> {
             AddNoteScreen(
                 modifier = modifier,
                 state = state,
@@ -44,9 +50,9 @@ fun NavigationGraph(
                 navController = navController
             )
         }
-        composable(route = Route.NoteDetailScreen.route + "/{noteId}") { backStackEntry ->
+        composable<NoteDetailScreen> { backStackEntry ->
             val noteId = backStackEntry.arguments?.getString("noteId")
-            val note = state.notes?.find { it.id.toString() == noteId }
+            val note = state.notes.find { it.id.toString() == noteId }
             NoteDetailScreen(
                 modifier = modifier,
                 state = state,
@@ -55,15 +61,15 @@ fun NavigationGraph(
                 note = note ?: throw IllegalArgumentException("Note not found")
             )
         }
-        composable(Route.BookmarkScreen.route) {
+        composable<BookmarkScreen> {
             BookmarkScreen(
-                modifier = modifier,
                 state = state,
-                event = event,
-                navController = navController
+                onNoteClick = {id ->
+                    navController.navigate(NoteDetailScreen(id.toString()))
+                }
             )
         }
-        composable(Route.SettingScreen.route) {
+        composable<SettingScreen> {
             NoteSetting(
                 modifier = modifier,
                 state = state,

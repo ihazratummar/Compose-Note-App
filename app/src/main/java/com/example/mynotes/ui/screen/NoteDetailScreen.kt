@@ -61,7 +61,7 @@ fun NoteDetailScreen(
                         event(NoteEvent.RefreshNotes)
                     }) {
                         Row(
-                            modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8, vertical = MaterialTheme.dimens.size8),
+                            modifier = Modifier.padding(horizontal = dimens.size8, vertical = dimens.size8),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
@@ -69,7 +69,7 @@ fun NoteDetailScreen(
                                 painter = painterResource(id = R.drawable.arrowleft),
                                 contentDescription = "Back"
                             )
-                            Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
+                            Spacer(modifier = Modifier.width(dimens.size8))
                             Text(text = "Back")
                         }
                     }
@@ -130,14 +130,14 @@ fun NoteDetailScreen(
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = MaterialTheme.typography.headlineMedium.fontSize
                     ),
-                    modifier = Modifier.padding(MaterialTheme.dimens.size4),
+                    modifier = Modifier.padding(dimens.size4),
                     imeAction = ImeAction.Next
                 )
             }
             item {
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size5))
+                Spacer(modifier = Modifier.height(dimens.size5))
                 HorizontalDivider()
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size5))
+                Spacer(modifier = Modifier.height(dimens.size5))
             }
             item {
                 TransparentHintTextField(
@@ -148,7 +148,7 @@ fun NoteDetailScreen(
                     hint = if (state.updateDescription == null && note.description == "") DESCRIPTION_TEXT else "",
                     modifier = Modifier
                         .fillParentMaxSize()
-                        .padding(MaterialTheme.dimens.size5),
+                        .padding(dimens.size5),
                     textStyle = TextStyle(
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,

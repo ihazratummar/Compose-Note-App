@@ -68,7 +68,7 @@ fun NoteSetting(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.dimens.size8)
+                .padding(dimens.size8)
                 .padding(paddingValues),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -79,12 +79,12 @@ fun NoteSetting(
                     .clickable {
                         event(NoteEvent.LanguageDialog)
                     },
-                shape = RoundedCornerShape(MaterialTheme.dimens.size15)
+                shape = RoundedCornerShape(dimens.size15)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size20, vertical = MaterialTheme.dimens.size15),
+                        .padding(horizontal = dimens.size20, vertical = dimens.size15),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -92,7 +92,7 @@ fun NoteSetting(
                         painter = painterResource(id = R.drawable.languageicon),
                         contentDescription = "Language"
                     )
-                    Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
+                    Spacer(modifier = Modifier.width(dimens.size10))
                     Text(
                         modifier = Modifier,
                         text = stringResource(R.string.change_language)
@@ -107,7 +107,7 @@ fun NoteSetting(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    border = BorderStroke(MaterialTheme.dimens.size1, MaterialTheme.colorScheme.primary)
+                    border = BorderStroke(dimens.size1, MaterialTheme.colorScheme.primary)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -125,7 +125,7 @@ fun NoteSetting(
                                     painter = painterResource(id = R.drawable.bengali),
                                     contentDescription = "Bengali"
                                 )
-                                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
+                                Spacer(modifier = Modifier.width(dimens.size10))
                                 Text(text = "Bengali")
                             }
                         }
@@ -141,7 +141,7 @@ fun NoteSetting(
                                     painter = painterResource(id = R.drawable.english),
                                     contentDescription = "English"
                                 )
-                                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
+                                Spacer(modifier = Modifier.width(dimens.size10))
                                 Text(text = "English")
                             }
                         }
@@ -157,7 +157,7 @@ fun NoteSetting(
                                     painter = painterResource(id = R.drawable.english),
                                     contentDescription = "Hindi"
                                 )
-                                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
+                                Spacer(modifier = Modifier.width(dimens.size10))
                                 Text(text = "हिंदी")
                             }
                         }
