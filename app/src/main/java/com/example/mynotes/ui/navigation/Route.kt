@@ -1,12 +1,32 @@
 package com.example.mynotes.ui.navigation
 
+import androidx.annotation.DrawableRes
+import com.example.mynotes.R
+import kotlinx.serialization.Serializable
 
-sealed class Route(val route: String) {
 
-    data object NoteScreen : Route("note_screen")
-    data object AddNote : Route("add_note")
-    data object BookmarkScreen : Route("bookmark_screen")
-    data object NoteDetailScreen: Route("note_detail_screen/{noteId}")
-    data object SettingScreen: Route("setting_screen")
 
+@Serializable
+data object NoteScreen
+
+@Serializable
+data object BookmarkScreen
+
+@Serializable
+data object AddNoteScreen
+
+@Serializable
+data class NoteDetailScreen(val noteId: String)
+
+@Serializable
+data object SettingScreen
+
+@Serializable
+sealed class BottomNavigation<T>(val name : String , @DrawableRes val icon: Int, val route : T){
+
+    @Serializable
+    data object Home : BottomNavigation<NoteScreen>(name = "Home", icon = R.drawable.home, route = NoteScreen)
+
+    @Serializable
+    data object Bookmark : BottomNavigation<BookmarkScreen>(name = "Bookmark", icon = R.drawable.favourite, route = BookmarkScreen)
 }

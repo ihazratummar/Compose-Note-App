@@ -1,7 +1,7 @@
 package com.example.mynotes.ui.screen
 
-import android.util.Log
-import androidx.compose.foundation.clickable
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,8 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -36,31 +35,58 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.mynotes.R
-import com.example.mynotes.domain.model.Note
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
-import com.example.mynotes.ui.navigation.Route
+import com.example.mynotes.ui.navigation.AddNoteScreen
+import com.example.mynotes.ui.navigation.SettingScreen
+import com.example.mynotes.ui.screen.component.MediumNoteScreen
+import com.example.mynotes.ui.screen.component.NoteCard
 import com.example.mynotes.ui.screen.component.SearchNote
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.example.mynotes.ui.theme.WindowType
+import com.example.mynotes.ui.theme.dimens
+import com.example.mynotes.ui.theme.rememberWindowSize
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NoteScreen(
     modifier: Modifier = Modifier,
     state: NoteState,
     event: (NoteEvent) -> Unit,
     navController: NavHostController,
+    onNoteClick: (Int) -> Unit = {}
+) {
+
+    val window = rememberWindowSize()
+    when (window.width) {
+        WindowType.Compact -> {
+            CompactNoteScreen(state, navController, event, onNoteClick = onNoteClick)
+        }
+
+        WindowType.Medium -> {
+            MediumNoteScreen(state, navController, event)
+        }
+
+        WindowType.Expanded -> {
+            MediumNoteScreen(state, navController, event)
+        }
+    }
+
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CompactNoteScreen(
+    state: NoteState,
+    navController: NavHostController,
+    event: (NoteEvent) -> Unit,
+    onNoteClick: (Int) -> Unit = {}
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-
     // Ensure the keyboard remains open when notes are empty and search text is not empty
     LaunchedEffect(state.notes, state.searchText) {
         if (state.searchText.isNotEmpty() && state.notes.isEmpty()) {
@@ -68,6 +94,7 @@ fun NoteScreen(
         }
     }
     Scaffold(
+        modifier = Modifier,
         topBar = {
             TopAppBar(
                 title = {
@@ -81,39 +108,38 @@ fun NoteScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate(Route.SettingScreen.route) }) {
+                    IconButton(onClick = {
+                        navController.navigate(SettingScreen)
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.setting),
-                            contentDescription = "Bookmark"
+                            contentDescription = "Setting"
                         )
                     }
                     IconButton(onClick = { event(NoteEvent.ToggleTheme) }) {
-                        if (state.isDarkMode){
+                        if (state.isDarkMode) {
                             Icon(
                                 painter = painterResource(id = R.drawable.moon),
-                                contentDescription = "Bookmark"
+                                contentDescription = "Dark toggle"
                             )
-                        }else{
+                        } else {
                             Icon(
                                 painter = painterResource(id = R.drawable.sun),
-                                contentDescription = "Bookmark"
+                                contentDescription = "Light Toggle"
                             )
                         }
                     }
-                    IconButton(onClick = { navController.navigate(Route.BookmarkScreen.route) }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.favourite),
-                            contentDescription = "Bookmark"
-                        )
-                    }
                     OutlinedCard(onClick = { event(NoteEvent.ToggleSort) }) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            modifier = Modifier.padding(
+                                horizontal = dimens.size8,
+                                vertical = dimens.size5
+                            ),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(text = state.sortType.name)
-                            Spacer(modifier = Modifier.width(4.dp))
+                            Spacer(modifier = Modifier.width(dimens.size5))
                             Icon(
                                 painter = painterResource(id = R.drawable.sorticon),
                                 contentDescription = "Shorting"
@@ -121,12 +147,12 @@ fun NoteScreen(
                         }
                     }
                     IconButton(onClick = { event(NoteEvent.ToggleView) }) {
-                        if (state.isToggleView){
+                        if (state.isToggleView) {
                             Icon(
                                 painter = painterResource(id = R.drawable.cardview),
                                 contentDescription = "Bookmark"
                             )
-                        }else{
+                        } else {
                             Icon(
                                 painter = painterResource(id = R.drawable.listview),
                                 contentDescription = "Bookmark"
@@ -138,8 +164,9 @@ fun NoteScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                modifier = Modifier.navigationBarsPadding().padding(bottom = dimens.size50),
                 onClick = {
-                    navController.navigate(Route.AddNote.route)
+                    navController.navigate(AddNoteScreen)
                 },
             ) {
                 Icon(painter = painterResource(id = R.drawable.add), contentDescription = "Save")
@@ -151,12 +178,16 @@ fun NoteScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(horizontal = dimens.size20)
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                SearchNote(state, event)
+                SearchNote(
+                    state = state, event = event
+                )
                 Text(text = "No Notes")
+
             }
         } else {
             Column(
@@ -165,81 +196,42 @@ fun NoteScreen(
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SearchNote(state, event)
-                if (state.isToggleView){
+                SearchNote(
+                    modifier = Modifier.padding(dimens.size20),
+                    state = state,
+                    event = event
+                )
+                if (state.isToggleView) {
                     LazyVerticalStaggeredGrid(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(1f),
                         columns = StaggeredGridCells.Fixed(count = 2),
-                        contentPadding = PaddingValues(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(dimens.size8),
+                        horizontalArrangement = Arrangement.spacedBy(dimens.size8),
                     ) {
                         items(state.notes) { note ->
-                            NoteCard(note, navController)
+                            NoteCard(note, onNoteClick = onNoteClick)
                         }
                     }
-                }else{
-                    LazyColumn (
+                } else {
+                    LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp)
+                            .padding(horizontal = dimens.size20, vertical = dimens.size4)
                             .fillMaxHeight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ){
+                        verticalArrangement = Arrangement.spacedBy(dimens.size8)
+                    ) {
                         items(state.notes) { note ->
-                            NoteCard(note, navController)
+                            NoteCard(note, onNoteClick)
                         }
                     }
                 }
             }
         }
     }
-
 }
 
-@Composable
-fun NoteCard(
-    note: Note,
-    navController: NavController
-) {
 
-    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-    val formattedDate = dateFormat.format(Date(note.dateAdded))
-    Card(
-        modifier = Modifier
-            .clickable {
-                navController.navigate(Route.NoteDetailScreen.route + "/${note.id}")
-            }
-            .padding(4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp)
-        ) {
-            Text(
-                text = note.title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            Text(
-                text = note.description,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 2,
-                modifier = Modifier.padding(top = 4.dp),
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = formattedDate,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-    }
-}
+

@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -22,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,6 +32,7 @@ import androidx.navigation.NavHostController
 import com.example.mynotes.R
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
+import com.example.mynotes.ui.theme.dimens
 
 /**
  * @author Hazrat Ummar Shaikh
@@ -69,7 +68,7 @@ fun NoteSetting(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(dimens.size8)
                 .padding(paddingValues),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -80,12 +79,12 @@ fun NoteSetting(
                     .clickable {
                         event(NoteEvent.LanguageDialog)
                     },
-                shape = RoundedCornerShape(14.dp)
+                shape = RoundedCornerShape(dimens.size15)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 15.dp),
+                        .padding(horizontal = dimens.size20, vertical = dimens.size15),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -93,7 +92,7 @@ fun NoteSetting(
                         painter = painterResource(id = R.drawable.languageicon),
                         contentDescription = "Language"
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(dimens.size10))
                     Text(
                         modifier = Modifier,
                         text = stringResource(R.string.change_language)
@@ -108,11 +107,11 @@ fun NoteSetting(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                    border = BorderStroke(dimens.size1, MaterialTheme.colorScheme.primary)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.Center
                     ) {
                         IconButton(
@@ -121,29 +120,45 @@ fun NoteSetting(
                                 event(NoteEvent.ChangeLanguage("bn"))
                                 event(NoteEvent.LanguageDialog)
                             }) {
-                            Row() {
+                            Row {
                                 Icon(
                                     painter = painterResource(id = R.drawable.bengali),
                                     contentDescription = "Bengali"
                                 )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Spacer(modifier = Modifier.width(dimens.size10))
                                 Text(text = "Bengali")
                             }
                         }
-                        HorizontalDivider(thickness = 1.dp,)
+                        HorizontalDivider(thickness = 1.dp)
                         IconButton(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 event(NoteEvent.ChangeLanguage("en"))
                                 event(NoteEvent.LanguageDialog)
                             }) {
-                            Row() {
+                            Row {
                                 Icon(
                                     painter = painterResource(id = R.drawable.english),
                                     contentDescription = "English"
                                 )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Spacer(modifier = Modifier.width(dimens.size10))
                                 Text(text = "English")
+                            }
+                        }
+                        HorizontalDivider(thickness = 1.dp)
+                        IconButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                event(NoteEvent.ChangeLanguage("hi"))
+                                event(NoteEvent.LanguageDialog)
+                            }) {
+                            Row {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.english),
+                                    contentDescription = "Hindi"
+                                )
+                                Spacer(modifier = Modifier.width(dimens.size10))
+                                Text(text = "हिंदी")
                             }
                         }
                     }

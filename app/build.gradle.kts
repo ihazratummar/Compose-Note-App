@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.kotlin.serialization)
+    id("kotlin-parcelize")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
 }
@@ -89,4 +91,8 @@ dependencies {
     implementation (libs.coil.compose)
 
     implementation (libs.androidx.preference.ktx)
+
+    implementation(libs.androidx.material3.window.size)
+
+    implementation(libs.kotlinx.serialization.json)
 }
