@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -22,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -113,7 +111,7 @@ fun NoteSetting(
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.Center
                     ) {
                         IconButton(
@@ -122,7 +120,7 @@ fun NoteSetting(
                                 event(NoteEvent.ChangeLanguage("bn"))
                                 event(NoteEvent.LanguageDialog)
                             }) {
-                            Row() {
+                            Row {
                                 Icon(
                                     painter = painterResource(id = R.drawable.bengali),
                                     contentDescription = "Bengali"
@@ -131,20 +129,36 @@ fun NoteSetting(
                                 Text(text = "Bengali")
                             }
                         }
-                        HorizontalDivider(thickness = 1.dp,)
+                        HorizontalDivider(thickness = 1.dp)
                         IconButton(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 event(NoteEvent.ChangeLanguage("en"))
                                 event(NoteEvent.LanguageDialog)
                             }) {
-                            Row() {
+                            Row {
                                 Icon(
                                     painter = painterResource(id = R.drawable.english),
                                     contentDescription = "English"
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
                                 Text(text = "English")
+                            }
+                        }
+                        HorizontalDivider(thickness = 1.dp)
+                        IconButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                event(NoteEvent.ChangeLanguage("hi"))
+                                event(NoteEvent.LanguageDialog)
+                            }) {
+                            Row {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.english),
+                                    contentDescription = "Hindi"
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size10))
+                                Text(text = "हिंदी")
                             }
                         }
                     }

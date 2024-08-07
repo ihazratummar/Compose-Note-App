@@ -177,6 +177,7 @@ fun DeleteContactDialog(
 
 @Composable
 fun SearchNote(
+    modifier: Modifier = Modifier,
     state: NoteState,
     event: (NoteEvent) -> Unit,
 ) {
@@ -185,7 +186,7 @@ fun SearchNote(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(

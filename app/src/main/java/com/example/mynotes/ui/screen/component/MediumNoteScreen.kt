@@ -57,7 +57,8 @@ fun MediumNoteScreen(
             keyboardController?.show()
         }
     }
-    Scaffold(modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8),
+    Scaffold(
+        modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8),
         topBar = {
             TopAppBar(
                 title = {
@@ -135,7 +136,10 @@ fun MediumNoteScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                SearchNote(state, event)
+                SearchNote(
+                    state = state,
+                    event = event
+                )
                 Text(text = "No Notes")
             }
         } else {
@@ -145,7 +149,10 @@ fun MediumNoteScreen(
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SearchNote(state, event)
+                SearchNote(
+                    state = state,
+                    event = event
+                )
                 LazyVerticalStaggeredGrid(
                     modifier = Modifier
                         .fillMaxWidth()

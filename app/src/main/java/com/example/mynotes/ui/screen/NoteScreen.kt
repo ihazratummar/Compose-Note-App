@@ -173,11 +173,14 @@ fun CompactNoteScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(horizontal = MaterialTheme.dimens.size20)
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                SearchNote(state, event)
+                SearchNote(
+                    state = state, event = event
+                )
                 Text(text = "No Notes")
             }
         } else {
@@ -187,7 +190,11 @@ fun CompactNoteScreen(
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SearchNote(state, event)
+                SearchNote(
+                    modifier = Modifier.padding(MaterialTheme.dimens.size20),
+                    state = state,
+                    event = event
+                )
                 if (state.isToggleView) {
                     LazyVerticalStaggeredGrid(
                         modifier = Modifier
@@ -205,7 +212,8 @@ fun CompactNoteScreen(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(MaterialTheme.dimens.size4)
+                            .padding(horizontal = MaterialTheme.dimens.size20)
+                            .padding(vertical = MaterialTheme.dimens.size4)
                             .fillMaxHeight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8)
