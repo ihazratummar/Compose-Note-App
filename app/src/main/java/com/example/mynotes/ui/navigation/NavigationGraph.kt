@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.example.mynotes.ui.event.NoteEvent
 import com.example.mynotes.ui.event.NoteState
 import com.example.mynotes.ui.screen.AddNoteScreen
@@ -38,7 +39,7 @@ fun NavigationGraph(
                 event = event,
                 navController = navController,
                 onNoteClick = {id ->
-                    navController.navigate(NoteDetailScreen(id.toString()))
+                    navController.navigate(NoteDetailScreen(id))
                 }
             )
         }
@@ -51,8 +52,8 @@ fun NavigationGraph(
             )
         }
         composable<NoteDetailScreen> { backStackEntry ->
-            val noteId = backStackEntry.arguments?.getString("noteId")
-            val note = state.notes.find { it.id.toString() == noteId }
+            val noteId = backStackEntry.toRoute<NoteDetailScreen>()
+            val note = state.notes.find { it.id == noteId.noteId }
             NoteDetailScreen(
                 modifier = modifier,
                 state = state,
@@ -65,7 +66,7 @@ fun NavigationGraph(
             BookmarkScreen(
                 state = state,
                 onNoteClick = {id ->
-                    navController.navigate(NoteDetailScreen(id.toString()))
+                    navController.navigate(NoteDetailScreen(id))
                 }
             )
         }

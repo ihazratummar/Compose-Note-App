@@ -16,7 +16,7 @@ data object BookmarkScreen
 data object AddNoteScreen
 
 @Serializable
-data class NoteDetailScreen(val noteId: String)
+data class NoteDetailScreen(val noteId: Int)
 
 @Serializable
 data object SettingScreen
