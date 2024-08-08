@@ -275,8 +275,8 @@ private fun CompactNoteCard(
             }
             .padding(dimens.size5),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
     ) {
         Column(

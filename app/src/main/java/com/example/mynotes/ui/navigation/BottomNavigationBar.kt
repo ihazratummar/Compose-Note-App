@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
@@ -44,13 +45,12 @@ fun BottomNavigationBar(navController: NavHostController) {
     if (isBottomNavVisible) {
         Card (
             modifier = Modifier
-                .navigationBarsPadding()
-                .padding(horizontal = dimens.size15, vertical = dimens.size10)
-                .fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-            shape = RoundedCornerShape(dimens.size30)
+                .fillMaxWidth().height(dimens.size80),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
+            shape = RectangleShape
         ){
             NavigationBar(
+                modifier = Modifier.padding(dimens.size5),
                 containerColor = Color.Transparent,
             ) {
                 bottomNavItems.forEach { item ->
@@ -62,7 +62,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                         onClick = { navController.navigate(item.route) },
                         icon = {
                             Icon(
-                                modifier = Modifier,
+                                modifier = Modifier.size(dimens.size20),
                                 painter = painterResource(id = item.icon),
                                 contentDescription = item.name
                             )
@@ -70,8 +70,8 @@ fun BottomNavigationBar(navController: NavHostController) {
                         label = { Text(text = item.name) },
                         alwaysShowLabel = false,
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            selectedIconColor = MaterialTheme.colorScheme.onSurface,
+                            selectedTextColor = MaterialTheme.colorScheme.onSurface,
                             indicatorColor = Color.Transparent,
                             unselectedIconColor = Color.Gray,
                             unselectedTextColor = Color.Gray

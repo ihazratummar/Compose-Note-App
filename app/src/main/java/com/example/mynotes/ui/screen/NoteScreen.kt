@@ -164,16 +164,16 @@ fun CompactNoteScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.navigationBarsPadding().padding(bottom = dimens.size60),
+                modifier = Modifier.navigationBarsPadding().padding(bottom = dimens.size100),
                 onClick = {
                     navController.navigate(AddNoteScreen)
                 },
+                contentColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(painter = painterResource(id = R.drawable.add), contentDescription = "Save")
             }
         },
     ) { paddingValues ->
-
         if (state.notes.isEmpty()) {
             Column(
                 modifier = Modifier
@@ -197,7 +197,7 @@ fun CompactNoteScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchNote(
-                    modifier = Modifier.padding(dimens.size20),
+                    modifier = Modifier.padding(horizontal = dimens.size20),
                     state = state,
                     event = event
                 )
