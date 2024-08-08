@@ -110,8 +110,6 @@ fun NoteDetailScreen(
             }
         }
     ) { paddingValues ->
-
-
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)

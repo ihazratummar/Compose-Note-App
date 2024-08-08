@@ -164,7 +164,7 @@ fun CompactNoteScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.navigationBarsPadding().padding(bottom = dimens.size50),
+                modifier = Modifier.navigationBarsPadding().padding(bottom = dimens.size60),
                 onClick = {
                     navController.navigate(AddNoteScreen)
                 },
